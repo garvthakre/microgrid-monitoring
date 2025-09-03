@@ -15,7 +15,10 @@ function FleetInner() {
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-6 space-y-6">
-      <h1 className="text-xl font-semibold">{t("fleet")}</h1>
+      <div>
+        <h1 className="text-xl font-semibold">{t("fleet")}</h1>
+        <p className="text-sm text-muted-foreground">Chhattisgarh microgrid fleet overview</p>
+      </div>
 
       <div className="grid md:grid-cols-3 gap-4">
         <Card>
@@ -42,7 +45,7 @@ function FleetInner() {
         <CardHeader>
           <CardTitle className="text-sm">{t("sites")}</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow>

@@ -8,14 +8,15 @@ import {
   Line,
   LineChart,
   ResponsiveContainer,
-  Tooltip,
   XAxis,
   YAxis,
   PieChart,
   Pie,
   Cell,
 } from "recharts"
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 
+// Ensure local types exist to avoid missing module imports
 type SeriesPoint = { x: string | number; y: number }
 type ChartType = "area" | "line" | "pie"
 
@@ -25,7 +26,8 @@ export function ChartCard({
   type = "area",
   seriesKey = "y",
   xKey = "x",
-  colors = ["#0ea5a0", "#f97316", "#0f172a"],
+  // Use theme-aware shadcn chart tokens for a premium, cohesive palette
+  colors = ["hsl(var(--chart-1))", "hsl(var(--chart-2))", "hsl(var(--chart-3))"],
   height = 220,
 }: {
   title: string
@@ -36,47 +38,88 @@ export function ChartCard({
   colors?: string[]
   height?: number
 }) {
+  // Shared styling and compact number formatting
+  const gridColor = "hsl(var(--border))"
+  const compact = new Intl.NumberFormat(undefined, { notation: "compact", maximumFractionDigits: 2 })
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-sm">{title}</CardTitle>
+        <CardTitle className="text-sm text-pretty">{title}</CardTitle>
       </CardHeader>
       <CardContent>
-        <div style={{ height }}>
-          <ResponsiveContainer width="100%" height="100%">
-            {type === "pie" ? (
-              <PieChart>
-                <Pie data={data as any[]} dataKey={seriesKey} nameKey={xKey} outerRadius={70} innerRadius={40}>
-                  {(data as any[]).map((_, i) => (
-                    <Cell key={i} fill={colors[i % colors.length]} />
-                  ))}
-                </Pie>
-                <Tooltip />
-              </PieChart>
-            ) : type === "line" ? (
-              <LineChart data={data as any[]}>
-                <CartesianGrid strokeDasharray="4 4" />
-                <XAxis dataKey={xKey} />
-                <YAxis />
-                <Tooltip />
-                <Line type="monotone" dataKey={seriesKey} stroke={colors[0]} strokeWidth={2} dot={false} />
-              </LineChart>
-            ) : (
-              <AreaChart data={data as any[]}>
-                <defs>
-                  <linearGradient id="c0" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor={colors[0]} stopOpacity={0.4} />
-                    <stop offset="95%" stopColor={colors[0]} stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="4 4" />
-                <XAxis dataKey={xKey} />
-                <YAxis />
-                <Tooltip />
-                <Area type="monotone" dataKey={seriesKey} stroke={colors[0]} fillOpacity={1} fill="url(#c0)" />
-              </AreaChart>
-            )}
-          </ResponsiveContainer>
+        <div style={{ height }} role="region" aria-label={`${title} chart`} className="h-full">
+          <ChartContainer config={{ series: { label: title, color: colors[0] } }} className="h-full">
+            <ResponsiveContainer width="100%" height="100%">
+              {type === "pie" ? (
+                // Modern donut styling + correct tooltip content factory usage
+                <PieChart>
+                  <Pie
+                    data={data as any[]}
+                    dataKey={seriesKey}
+                    nameKey={xKey}
+                    innerRadius="58%"
+                    outerRadius="78%"
+                    cornerRadius={3}
+                    padAngle={2}
+                    stroke="transparent"
+                  >
+                    {(data as any[]).map((_, i) => (
+                      <Cell key={i} fill={colors[i % colors.length]} />
+                    ))}
+                  </Pie>
+                  <ChartTooltip
+                    content={ChartTooltipContent({
+                      valueFormatter: (v) => (typeof v === "number" ? compact.format(v) : String(v)),
+                    })}
+                  />
+                </PieChart>
+              ) : type === "line" ? (
+                // Premium line chart: subtle grid, hidden axes lines, compact tooltip, smoother stroke
+                <LineChart data={data as any[]}>
+                  <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
+                  <XAxis dataKey={xKey} axisLine={false} tickLine={false} tickMargin={8} minTickGap={12} />
+                  <YAxis axisLine={false} tickLine={false} tickMargin={8} width={40} />
+                  <ChartTooltip
+                    cursor={{ stroke: "hsl(var(--muted-foreground))", strokeDasharray: "3 3", strokeWidth: 1 }}
+                    content={ChartTooltipContent({
+                      valueFormatter: (v) => (typeof v === "number" ? compact.format(v) : String(v)),
+                    })}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey={seriesKey}
+                    stroke={colors[0]}
+                    strokeWidth={2.25}
+                    dot={false}
+                    activeDot={{ r: 3, strokeWidth: 0, fill: colors[0] }}
+                  />
+                </LineChart>
+              ) : (
+                // Premium area chart: remove gradient, use subtle fill opacity, compact tooltip
+                <AreaChart data={data as any[]}>
+                  <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
+                  <XAxis dataKey={xKey} axisLine={false} tickLine={false} tickMargin={8} minTickGap={12} />
+                  <YAxis axisLine={false} tickLine={false} tickMargin={8} width={40} />
+                  <ChartTooltip
+                    cursor={{ stroke: "hsl(var(--muted-foreground))", strokeDasharray: "3 3", strokeWidth: 1 }}
+                    content={ChartTooltipContent({
+                      valueFormatter: (v) => (typeof v === "number" ? compact.format(v) : String(v)),
+                    })}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey={seriesKey}
+                    stroke={colors[0]}
+                    strokeWidth={2}
+                    fill={colors[0]}
+                    fillOpacity={0.16}
+                    isAnimationActive
+                  />
+                </AreaChart>
+              )}
+            </ResponsiveContainer>
+          </ChartContainer>
         </div>
       </CardContent>
     </Card>

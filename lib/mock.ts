@@ -5,11 +5,18 @@ export type Site = {
   coords: { x: number; y: number }
 }
 
+// Chhattisgarh sites (approximate positions on placeholder map as percentages)
 export const SITES: Site[] = [
-  { id: "IN-001", name: "Odisha Village A", health: "good", coords: { x: 62, y: 58 } },
-  { id: "IN-002", name: "Odisha Village B", health: "warning", coords: { x: 68, y: 46 } },
-  { id: "IN-003", name: "Odisha Village C", health: "good", coords: { x: 55, y: 52 } },
-  { id: "IN-004", name: "Rajasthan Hamlet", health: "critical", coords: { x: 32, y: 28 } },
+  { id: "CG-001", name: "Raipur Solar Hub", health: "good", coords: { x: 58, y: 55 } },
+  { id: "CG-002", name: "Bilaspur Community Microgrid", health: "good", coords: { x: 60, y: 38 } },
+  { id: "CG-003", name: "Durg-Bhilai Industrial Site", health: "warning", coords: { x: 50, y: 56 } },
+  { id: "CG-004", name: "Korba Thermal Offset", health: "good", coords: { x: 68, y: 33 } },
+  { id: "CG-005", name: "Raigarh Rural Cluster", health: "warning", coords: { x: 74, y: 45 } },
+  { id: "CG-006", name: "Jagdalpur Tribal Hamlet", health: "good", coords: { x: 58, y: 78 } },
+  { id: "CG-007", name: "Ambikapur Forest Edge", health: "good", coords: { x: 55, y: 22 } },
+  { id: "CG-008", name: "Dhamtari Agri Feeder", health: "good", coords: { x: 58, y: 64 } },
+  { id: "CG-009", name: "Rajnandgaon Township", health: "critical", coords: { x: 46, y: 58 } },
+  { id: "CG-010", name: "Kanker Remote Site", health: "warning", coords: { x: 52, y: 70 } },
 ]
 
 export function randomWalk(prev: number, step = 2, min = 0, max = 100) {
@@ -27,26 +34,61 @@ export function makeSeries(n = 24, start = 50, min = 0, max = 100) {
   return out
 }
 
+function solarCurve(hour: number, sunrise = 6, sunset = 18, peak = 100) {
+  if (hour < sunrise || hour > sunset) return 0
+  const t = (hour - sunrise) / (sunset - sunrise) // 0..1
+  // Smooth midday peak
+  return Math.sin(Math.PI * t) * peak
+}
+
+function loadCurve(hour: number, base = 40, morningPeak = 14, eveningPeak = 18) {
+  // Morning bump around 8, evening bump around 19
+  const m = Math.exp(-0.5 * Math.pow((hour - 8) / 2.2, 2)) * morningPeak
+  const e = Math.exp(-0.5 * Math.pow((hour - 19) / 2.2, 2)) * eveningPeak
+  return base + m + e
+}
+
+function makeDiurnalSeries(n = 24, genScale = 1, loadScale = 1) {
+  const gen: { x: string; y: number }[] = []
+  const load: { x: string; y: number }[] = []
+  const soc: { x: string; y: number }[] = []
+  let stateSoc = 65 + Math.random() * 10
+  for (let h = 0; h < n; h++) {
+    const g = Math.max(0, Math.min(100, solarCurve(h, 6, 18, 90) * genScale + (Math.random() * 10 - 5)))
+    const l = Math.max(10, Math.min(100, loadCurve(h) * 0.8 * loadScale + (Math.random() * 6 - 3)))
+    // Simple SOC integration (bounded)
+    stateSoc = Math.max(10, Math.min(100, stateSoc + (g - l) * 0.05))
+    gen.push({ x: `${h}`, y: Math.round(g * 10) / 10 })
+    load.push({ x: `${h}`, y: Math.round(l * 10) / 10 })
+    soc.push({ x: `${h}`, y: Math.round(stateSoc) })
+  }
+  return { generation: gen, consumption: load, soc }
+}
+
 export function mockSiteDetail(id: string) {
   const base = SITES.find((s) => s.id === id) || SITES[0]
+  // Site-specific scaling to vary profiles subtly
+  const genScale = 0.9 + Math.random() * 0.3
+  const loadScale = 0.9 + Math.random() * 0.3
+  const series = makeDiurnalSeries(24, genScale, loadScale)
+  const lastG = series.generation.at(-1)?.y ?? 50
+  const lastL = series.consumption.at(-1)?.y ?? 45
+  const lastSoc = series.soc.at(-1)?.y ?? 70
+
   return {
     id,
     name: base.name,
     health: base.health,
     kpis: {
-      gen: +(40 + Math.random() * 20).toFixed(1),
-      load: +(30 + Math.random() * 20).toFixed(1),
-      soc: +(50 + Math.random() * 40).toFixed(0),
+      gen: +lastG.toFixed(1),
+      load: +lastL.toFixed(1),
+      soc: +lastSoc.toFixed(0),
       soh: +(80 + Math.random() * 10).toFixed(0),
       cycles: +(900 + Math.random() * 200).toFixed(0),
-      carbon: +(2 + Math.random() * 1.5).toFixed(2),
-      dieselOffset: +(5 + Math.random() * 3).toFixed(1),
+      carbon: +(lastG * 0.03 + Math.random() * 0.2).toFixed(2),
+      dieselOffset: +(lastG * 0.08 + Math.random() * 0.7).toFixed(1),
     },
-    series: {
-      generation: makeSeries(24, 60),
-      consumption: makeSeries(24, 55),
-      soc: makeSeries(24, 70),
-    },
+    series,
   }
 }
 
@@ -59,7 +101,10 @@ export function mockFleetSummary() {
 }
 
 export function expectedVsActual() {
-  const a = makeSeries(24, 60)
-  const b = a.map((p) => ({ x: p.x, y: Math.max(0, Math.min(100, p.y + (Math.random() * 10 - 5))) }))
-  return { expected: a, actual: b }
+  const exp = makeDiurnalSeries(24, 1, 1).generation
+  const act = exp.map((p) => ({
+    x: p.x,
+    y: Math.max(0, Math.min(100, p.y + (Math.random() * 8 - 4))),
+  }))
+  return { expected: exp, actual: act }
 }
