@@ -14,34 +14,39 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Badge } from "@/components/ui/badge"
 import { Sun, Moon, Globe, CircleUserRound, PanelsTopLeft } from "lucide-react"
-import { useEffect, useState } from "react"
 import { useI18n } from "@/lib/i18n"
-
-type Role = "admin" | "operator" | "technician" | "community" | "govt"
+import { useRole } from "@/components/role-provider"
+import type { Role } from "@/lib/roles"
 
 export function AppHeader() {
   const pathname = usePathname()
   const { theme, setTheme } = useTheme()
   const { t, lang, setLang } = useI18n()
-  const [role, setRole] = useState<Role>("operator")
+  const { role, setRole } = useRole()
 
-  useEffect(() => {
-    const saved = localStorage.getItem("role") as Role | null
-    if (saved) setRole(saved)
-  }, [])
-  useEffect(() => {
-    localStorage.setItem("role", role)
-  }, [role])
-
-  const nav = [
-    { href: "/", label: t("overview") },
-    { href: "/fleet", label: t("fleet") },
-    { href: "/analytics", label: t("analytics") },
-    { href: "/admin", label: t("admin") },
+  const allNav = [
+    { href: "/", label: t("overview"), roles: ["admin", "operator", "technician", "community", "govt"] as Role[] },
+    { href: "/fleet", label: t("fleet"), roles: ["admin", "operator", "technician", "govt"] as Role[] },
+    { href: "/analytics", label: t("analytics"), roles: ["admin", "govt"] as Role[] },
+    { href: "/admin", label: t("admin"), roles: ["admin"] as Role[] },
   ]
+  const roleDash =
+    role === "operator"
+      ? { href: "/operator", label: "Dashboard", roles: ["operator"] as Role[] }
+      : role === "technician"
+        ? { href: "/technician", label: "Dashboard", roles: ["technician"] as Role[] }
+        : role === "community"
+          ? { href: "/community", label: "Dashboard", roles: ["community"] as Role[] }
+          : role === "govt"
+            ? { href: "/govt", label: "Dashboard", roles: ["govt"] as Role[] }
+            : null
+  const nav = (roleDash ? [roleDash] : []).concat(allNav.filter((n) => n.roles.includes(role)))
 
   return (
     <header className="sticky top-0 z-40 border-b bg-background/70 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="hidden md:block text-xs text-muted-foreground border-b bg-muted/30">
+        <div className="mx-auto max-w-7xl px-4 py-1">Government of Chhattisgarh · Microgrid Monitoring</div>
+      </div>
       <div className="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <PanelsTopLeft className="size-6 text-primary" aria-hidden />
@@ -101,7 +106,7 @@ export function AppHeader() {
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="sm" className="gap-2 bg-transparent" aria-label="role">
                 <CircleUserRound className="size-4" />
-                <span className="hidden sm:inline">{t("role")}</span>
+                <span className="hidden sm:inline capitalize">{role}</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">

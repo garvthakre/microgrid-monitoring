@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { SITES, mockFleetSummary } from "@/lib/mock"
+import { RoleGuard } from "@/components/role-guard"
 
 function FleetInner() {
   const { t } = useI18n()
@@ -83,7 +84,9 @@ export default function Page() {
   return (
     <I18nProvider>
       <AppHeader />
-      <FleetInner />
+      <RoleGuard allow={["admin", "operator", "technician", "govt"]}>
+        <FleetInner />
+      </RoleGuard>
     </I18nProvider>
   )
 }

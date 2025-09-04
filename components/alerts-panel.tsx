@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { useI18n } from "@/lib/i18n"
+import { useRole } from "@/components/role-provider"
 
 type Alert = {
   id: string
@@ -24,6 +25,8 @@ function LevelBadge({ level }: { level: Alert["level"] }) {
 
 export function AlertsPanel() {
   const { t } = useI18n()
+  const { role } = useRole()
+  const canAct = role === "admin" || role === "operator" || role === "technician"
   const { data, mutate } = useSWR<Alert[]>("/api/alerts", fetcher, { refreshInterval: 4000 })
 
   async function ack(id: string) {
@@ -55,18 +58,22 @@ export function AlertsPanel() {
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => ack(a.id)}
-                  disabled={a.acknowledged}
-                  aria-label={t("acknowledge")}
-                >
-                  {t("acknowledge")}
-                </Button>
-                <Button size="sm" variant="secondary" onClick={() => escalate(a.id)} aria-label={t("escalate")}>
-                  {t("escalate")}
-                </Button>
+                {canAct && (
+                  <>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => ack(a.id)}
+                      disabled={a.acknowledged}
+                      aria-label={t("acknowledge")}
+                    >
+                      {t("acknowledge")}
+                    </Button>
+                    <Button size="sm" variant="secondary" onClick={() => escalate(a.id)} aria-label={t("escalate")}>
+                      {t("escalate")}
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
           ))

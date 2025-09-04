@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChartCard } from "@/components/chart-card"
 import { expectedVsActual } from "@/lib/mock"
 import { ExportMenu } from "@/components/export-menu"
+import { RoleGuard } from "@/components/role-guard"
 
 function AnalyticsInner() {
   const { t } = useI18n()
@@ -37,7 +38,9 @@ export default function Page() {
   return (
     <I18nProvider>
       <AppHeader />
-      <AnalyticsInner />
+      <RoleGuard allow={["admin", "govt"]}>
+        <AnalyticsInner />
+      </RoleGuard>
     </I18nProvider>
   )
 }
