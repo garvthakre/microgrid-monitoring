@@ -66,9 +66,7 @@ export function AppHeader() {
           </nav>
         </div>
         <div className="flex items-center gap-2">
-          <Badge variant="outline" className="hidden sm:inline-flex">
-            {t("demoMode")}
-          </Badge>
+        
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

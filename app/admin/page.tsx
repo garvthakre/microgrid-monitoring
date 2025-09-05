@@ -10,6 +10,7 @@ import { RoleGuard } from "@/components/role-guard"
 import { KpiCard } from "@/components/kpi-card"
 import { SitesMap } from "@/components/map"
 import { ExportMenu } from "@/components/export-menu"
+import { EnergySystemCard } from "@/components/energy-system-card"
 
 function AdminInner() {
   const { t } = useI18n()
@@ -20,6 +21,37 @@ function AdminInner() {
     { id: "KRB", name: "Korba", x: 63, y: 43, health: "critical" as const },
     { id: "RGB", name: "Raigarh", x: 68, y: 45, health: "good" as const },
   ]
+
+  // Energy system data - in real app this would come from your API/state
+  const energySystems = [
+    {
+      type: "solar" as const,
+      title: "Solar Panel Array",
+      voltage: 48.2,
+      current: 12.5,
+    },
+    {
+      type: "wind" as const, 
+      title: "Wind Turbine",
+      voltage: 42.8,
+      current: 8.3,
+    },
+    {
+      type: "battery" as const,
+      title: "Battery Storage",
+      voltage: 51.4,
+      current: 15.2,
+    },
+    {
+      type: "grid" as const,
+      title: "Grid Connection", 
+      voltage: 230.0,
+      current: 22.1,
+      voltageUnit: "V AC",
+      currentUnit: "A AC",
+    },
+  ]
+
   return (
     <main className="mx-auto max-w-7xl px-4 py-6 space-y-6">
       <h1 className="text-xl font-semibold">{t("admin")}</h1>
@@ -30,6 +62,24 @@ function AdminInner() {
         <KpiCard title="Storage (SoC)" value={78} unit="%" delta={+2.1} intent="neutral" />
         <KpiCard title="Consumption" value={10.9} unit="MWh" delta={+1.2} intent="warning" />
         <KpiCard title="Active Alerts" value={3} unit="" delta={-1.0} intent="success" />
+      </div>
+
+      {/* Energy Systems Status */}
+      <div className="space-y-3">
+        <h2 className="text-lg font-medium">Energy Systems Status</h2>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {energySystems.map((system) => (
+            <EnergySystemCard
+              key={system.type}
+              type={system.type}
+              title={system.title}
+              voltage={system.voltage}
+              current={system.current}
+              voltageUnit={system.voltageUnit}
+              currentUnit={system.currentUnit}
+            />
+          ))}
+        </div>
       </div>
 
       {/* Fleet map */}
