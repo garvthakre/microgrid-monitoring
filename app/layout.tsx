@@ -11,8 +11,8 @@ import { RoleProvider } from "@/components/role-provider"
 import { ROLE_COOKIE, type Role } from "@/lib/roles"
 
 export const metadata: Metadata = {
-  title: "v0 App",
-  description: "Created with v0",
+  title: "URJANETRA - Microgrid Monitoring Dashboard",
+  description: "Government of Chhattisgarh Microgrid Monitoring System",
   generator: "v0.app",
 }
 

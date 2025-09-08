@@ -16,7 +16,7 @@ export function SitesMap({ title, sites }: { title: string; sites: SitePoint[] }
       <CardContent>
         <div
           className="relative w-full rounded-md border bg-muted/30"
-          style={{ height: "50vh" }} // Make height responsive for devices
+          style={{ height: "min(40vh, 300px)" }} // Made map height responsive for mobile devices
           role="img"
           aria-label="Sites health map for Chhattisgarh"
         >
@@ -52,15 +52,21 @@ export function SitesMap({ title, sites }: { title: string; sites: SitePoint[] }
             />
           ))}
 
-          <div className="absolute bottom-2 left-2 flex items-center gap-3 rounded border bg-background/80 px-2 py-1">
+          <div className="absolute bottom-2 left-2 flex flex-wrap items-center gap-2 sm:gap-3 rounded border bg-background/80 px-2 py-1">
             <span className="flex items-center gap-1 text-xs text-muted-foreground">
-              <span className="inline-block size-2 rounded-full bg-emerald-500" aria-hidden /> Good
+              <span className="inline-block size-2 rounded-full bg-emerald-500" aria-hidden />
+              <span className="hidden sm:inline">Good</span>
+              <span className="sm:hidden">G</span>
             </span>
             <span className="flex items-center gap-1 text-xs text-muted-foreground">
-              <span className="inline-block size-2 rounded-full bg-amber-500" aria-hidden /> Warning
+              <span className="inline-block size-2 rounded-full bg-amber-500" aria-hidden />
+              <span className="hidden sm:inline">Warning</span>
+              <span className="sm:hidden">W</span>
             </span>
             <span className="flex items-center gap-1 text-xs text-muted-foreground">
-              <span className="inline-block size-2 rounded-full bg-red-500" aria-hidden /> Critical
+              <span className="inline-block size-2 rounded-full bg-red-500" aria-hidden />
+              <span className="hidden sm:inline">Critical</span>
+              <span className="sm:hidden">C</span>
             </span>
           </div>
         </div>

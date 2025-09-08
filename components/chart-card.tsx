@@ -43,13 +43,18 @@ export function ChartCard({
   const compact = new Intl.NumberFormat(undefined, { notation: "compact", maximumFractionDigits: 2 })
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-sm text-pretty">{title}</CardTitle>
+    <Card className="h-full">
+      <CardHeader className="pb-3">
+        <CardTitle className="text-sm font-medium text-pretty leading-tight">{title}</CardTitle>
       </CardHeader>
-      <CardContent>
-        <div style={{ height }} role="region" aria-label={`${title} chart`} className="h-full">
-          <ChartContainer config={{ series: { label: title, color: colors[0] } }} className="h-full">
+      <CardContent className="pt-0">
+        <div
+          style={{ height: `${height}px` }}
+          className="w-full min-h-[180px] sm:min-h-[220px]"
+          role="region"
+          aria-label={`${title} chart`}
+        >
+          <ChartContainer config={{ series: { label: title, color: colors[0] } }} className="h-full w-full">
             <ResponsiveContainer width="100%" height="100%">
               {type === "pie" ? (
                 // Modern donut styling + correct tooltip content factory usage
@@ -78,8 +83,23 @@ export function ChartCard({
                 // Premium line chart: subtle grid, hidden axes lines, compact tooltip, smoother stroke
                 <LineChart data={data as any[]}>
                   <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
-                  <XAxis dataKey={xKey} axisLine={false} tickLine={false} tickMargin={8} minTickGap={12} />
-                  <YAxis axisLine={false} tickLine={false} tickMargin={8} width={40} />
+                  <XAxis
+                    dataKey={xKey}
+                    axisLine={false}
+                    tickLine={false}
+                    tickMargin={8}
+                    minTickGap={20}
+                    fontSize={12}
+                    className="text-xs"
+                  />
+                  <YAxis
+                    axisLine={false}
+                    tickLine={false}
+                    tickMargin={8}
+                    width={35}
+                    fontSize={12}
+                    className="text-xs"
+                  />
                   <ChartTooltip
                     cursor={{ stroke: "hsl(var(--muted-foreground))", strokeDasharray: "3 3", strokeWidth: 1 }}
                     content={ChartTooltipContent({
@@ -99,8 +119,23 @@ export function ChartCard({
                 // Premium area chart: remove gradient, use subtle fill opacity, compact tooltip
                 <AreaChart data={data as any[]}>
                   <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
-                  <XAxis dataKey={xKey} axisLine={false} tickLine={false} tickMargin={8} minTickGap={12} />
-                  <YAxis axisLine={false} tickLine={false} tickMargin={8} width={40} />
+                  <XAxis
+                    dataKey={xKey}
+                    axisLine={false}
+                    tickLine={false}
+                    tickMargin={8}
+                    minTickGap={20}
+                    fontSize={12}
+                    className="text-xs"
+                  />
+                  <YAxis
+                    axisLine={false}
+                    tickLine={false}
+                    tickMargin={8}
+                    width={35}
+                    fontSize={12}
+                    className="text-xs"
+                  />
                   <ChartTooltip
                     cursor={{ stroke: "hsl(var(--muted-foreground))", strokeDasharray: "3 3", strokeWidth: 1 }}
                     content={ChartTooltipContent({

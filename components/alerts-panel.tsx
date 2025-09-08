@@ -40,24 +40,27 @@ export function AlertsPanel() {
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle className="text-sm">{t("alerts")}</CardTitle>
+      <CardHeader className="pb-2 sm:pb-3">
+        <CardTitle className="text-sm sm:text-base">{t("alerts")}</CardTitle>
       </CardHeader>
-      <CardContent className="flex flex-col gap-3">
+      <CardContent className="flex flex-col gap-2 sm:gap-3">
         {data?.length ? (
           data.map((a) => (
-            <div key={a.id} className="flex items-start justify-between gap-4">
-              <div className="flex items-center gap-2">
+            <div
+              key={a.id}
+              className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 sm:gap-4 p-2 sm:p-0 rounded-md sm:rounded-none bg-muted/30 sm:bg-transparent"
+            >
+              <div className="flex items-start gap-2 min-w-0 flex-1">
                 <LevelBadge level={a.level} />
-                <div className="text-sm">
-                  <div className="font-medium">{a.message}</div>
-                  <div className="text-muted-foreground text-xs">
+                <div className="text-sm min-w-0 flex-1">
+                  <div className="font-medium break-words text-sm sm:text-base leading-tight">{a.message}</div>
+                  <div className="text-muted-foreground text-xs sm:text-sm break-words mt-1">
                     {new Date(a.ts).toLocaleString()} • {t("site")} {a.siteId}
                     {a.acknowledged ? ` • ${t("acknowledged")}` : ""}
                   </div>
                 </div>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-shrink-0 self-start">
                 {canAct && (
                   <>
                     <Button
@@ -66,11 +69,20 @@ export function AlertsPanel() {
                       onClick={() => ack(a.id)}
                       disabled={a.acknowledged}
                       aria-label={t("acknowledge")}
+                      className="text-xs sm:text-sm px-2 sm:px-3 h-7 sm:h-8"
                     >
-                      {t("acknowledge")}
+                      <span className="hidden sm:inline">{t("acknowledge")}</span>
+                      <span className="sm:hidden">Ack</span>
                     </Button>
-                    <Button size="sm" variant="secondary" onClick={() => escalate(a.id)} aria-label={t("escalate")}>
-                      {t("escalate")}
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      onClick={() => escalate(a.id)}
+                      aria-label={t("escalate")}
+                      className="text-xs sm:text-sm px-2 sm:px-3 h-7 sm:h-8"
+                    >
+                      <span className="hidden sm:inline">{t("escalate")}</span>
+                      <span className="sm:hidden">Esc</span>
                     </Button>
                   </>
                 )}
@@ -78,7 +90,7 @@ export function AlertsPanel() {
             </div>
           ))
         ) : (
-          <div className="text-sm text-muted-foreground">{t("info")}</div>
+          <div className="text-sm sm:text-base text-muted-foreground text-center py-4">{t("info")}</div>
         )}
       </CardContent>
     </Card>

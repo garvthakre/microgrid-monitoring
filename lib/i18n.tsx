@@ -10,7 +10,7 @@ type Dictionaries = Record<Lang, Dict>
 
 const dictionaries: Dictionaries = {
   en: {
-    appTitle: "Microgrid Monitoring",
+    appTitle: "URJANETRA",
     overview: "Overview",
     fleet: "Fleet",
     analytics: "Analytics",
@@ -84,7 +84,7 @@ const dictionaries: Dictionaries = {
     demoMode: "Demo Mode",
   },
   hi: {
-    appTitle: "माइक्रोग्रिड मॉनिटरिंग",
+    appTitle: "उर्जानेत्र",
     overview: "ओवरव्यू",
     fleet: "फ्लीट",
     analytics: "एनालिटिक्स",
@@ -158,7 +158,7 @@ const dictionaries: Dictionaries = {
     demoMode: "डेमो मोड",
   },
   or: {
-    appTitle: "ମାଇକ୍ରୋଗ୍ରିଡ୍ ନିରୀକ୍ଷଣ",
+    appTitle: "ଉର୍ଜାନେତ୍ର",
     overview: "ସମୀକ୍ଷା",
     fleet: "ଫ୍ଲିଟ୍",
     analytics: "ବିଶ୍ଳେଷଣ",
@@ -219,7 +219,7 @@ const dictionaries: Dictionaries = {
     filter: "ଫିଲ୍ଟର",
     forecast: "ପୂର୍ବାନୁମାନ",
     batteryLifePrediction: "ବ୍ୟାଟେରୀ ଆୟୁ ପୂର୍ବାନୁମାନ",
-    faultProbability: "ତ୍ରୁଟି ସମ୍ଭାବନା",
+    faultProbability: "ତ୍ରୁଟି ସମ୍ଭାଵନା",
     demandForecast: "ଚାହିଦା ପୂର୍ବାନୁମାନ",
     lossAnalysis: "ହାନି ବିଶ୍ଳେଷଣ",
     technicalLoss: "ପ୍ରାଯୁକ୍ତିକ ହାନି",
@@ -232,7 +232,7 @@ const dictionaries: Dictionaries = {
     demoMode: "ଡେମୋ ମୋଡ୍",
   },
   ar: {
-    appTitle: "مراقبة الميكروغريد",
+    appTitle: "أورجانيترا",
     overview: "نظرة عامة",
     fleet: "الأسطول",
     analytics: "التحليلات",
