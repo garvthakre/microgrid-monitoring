@@ -17,7 +17,6 @@ function loadAt(hourFrac: number) {
 
 export async function GET() {
   const encoder = new TextEncoder()
-  
   const stream = new ReadableStream({
     start(controller) {
       // Initialize near current baseline
@@ -29,75 +28,40 @@ export async function GET() {
       let gen = solarAt(hourFrac0) + (Math.random() * 6 - 3)
       let load = loadAt(hourFrac0) + (Math.random() * 6 - 3)
       let soc = 65 + Math.random() * 10
-      
-      let isActive = true
 
       function push() {
-        // Check if controller is still active
-        if (!isActive) {
-          return
-        }
+        const tNow = new Date()
+        const istNow = new Date(tNow.getTime() + 5.5 * 60 * 60 * 1000)
+        const hourFrac = istNow.getUTCHours() + istNow.getUTCMinutes() / 60 + istNow.getUTCSeconds() / 3600
 
-        try {
-          const tNow = new Date()
-          const istNow = new Date(tNow.getTime() + 5.5 * 60 * 60 * 1000)
-          const hourFrac = istNow.getUTCHours() + istNow.getUTCMinutes() / 60 + istNow.getUTCSeconds() / 3600
+        const gBase = solarAt(hourFrac)
+        const lBase = loadAt(hourFrac)
 
-          const gBase = solarAt(hourFrac)
-          const lBase = loadAt(hourFrac)
+        gen = Math.max(0, Math.min(100, gBase + (Math.random() * 6 - 3)))
+        load = Math.max(0, Math.min(100, lBase + (Math.random() * 6 - 3)))
+        soc = Math.max(10, Math.min(100, soc + (gen - load) * 0.02 + (Math.random() * 0.6 - 0.3)))
 
-          gen = Math.max(0, Math.min(100, gBase + (Math.random() * 6 - 3)))
-          load = Math.max(0, Math.min(100, lBase + (Math.random() * 6 - 3)))
-          soc = Math.max(10, Math.min(100, soc + (gen - load) * 0.02 + (Math.random() * 0.6 - 0.3)))
+        const payload = JSON.stringify({
+          ts: Date.now(),
+          generation: +gen.toFixed(1),
+          load: +load.toFixed(1),
+          soc: +soc.toFixed(1),
+        })
 
-          const payload = JSON.stringify({
-            ts: Date.now(),
-            generation: +gen.toFixed(1),
-            load: +load.toFixed(1),
-            soc: +soc.toFixed(1),
-          })
-
-          controller.enqueue(encoder.encode(`data: ${payload}\n\n`))
-        } catch (error) {
-          // Controller is closed, stop the interval
-          isActive = false
-          clearInterval(interval)
-        }
+        controller.enqueue(encoder.encode(`data: ${payload}\n\n`))
       }
 
       const interval = setInterval(push, 2000)
-      
-      // Initial push
       push()
-      
-      // Cleanup when stream is closed
-      const cleanup = () => {
-        isActive = false
-        clearInterval(interval)
-      }
-
-      // Handle different ways the stream can be closed
-      if (controller.signal) {
-        controller.signal.addEventListener('abort', cleanup)
-      }
-      
-      // Also handle when the controller is closed
-      const originalClose = controller.close
-      controller.close = function() {
-        cleanup()
-        return originalClose.call(this)
-      }
+      // @ts-ignore
+      controller.signal?.addEventListener?.("abort", () => clearInterval(interval))
     },
   })
-
   return new Response(stream, {
     headers: {
       "Content-Type": "text/event-stream",
       "Cache-Control": "no-cache, no-transform",
       Connection: "keep-alive",
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET",
-      "Access-Control-Allow-Headers": "Cache-Control"
     },
   })
 }
