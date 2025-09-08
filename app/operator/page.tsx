@@ -12,7 +12,7 @@ import { ExportMenu } from "@/components/export-menu"
 import { KpiCard } from "@/components/kpi-card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import * as React from "react"
-
+import { EnergySystemCard } from "@/components/energy-system-card"
 function OperatorSelector() {
   const [site, setSite] = React.useState("Raipur")
   return (
@@ -69,25 +69,61 @@ function ControlsCard() {
     </Card>
   )
 }
-
+  const energySystems = [
+    {
+      type: "solar" as const,
+      title: "Solar Panel Array",
+      voltage: 48.2,
+      current: 12.5,
+    },
+    {
+      type: "wind" as const, 
+      title: "Wind Turbine",
+      voltage: 42.8,
+      current: 8.3,
+    },
+    {
+      type: "battery" as const,
+      title: "Battery Storage",
+      voltage: 51.4,
+      current: 15.2,
+    },
+    {
+      type: "grid" as const,
+      title: "Grid Connection", 
+      voltage: 230.0,
+      current: 22.1,
+      voltageUnit: "V AC",
+      currentUnit: "A AC",
+    },
+  ]
 export default function OperatorHome() {
   return (
     <I18nProvider>
       <AppHeader />
       <RoleGuard allow={["operator"]}>
         <main className="mx-auto max-w-7xl px-2 sm:px-4 py-4 sm:py-6 space-y-4 sm:space-y-6">
-          <h1 className="text-lg sm:text-xl font-semibold text-balance">Operator Console</h1>
+          <h1 className="text-lg sm:text-xl font-semibold text-balance">ADMIN</h1>
 
           {/* Site selector */}
           <OperatorSelector />
 
-          {/* KPIs */}
-          <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-4">
-            <KpiCard title="Generation" value={3.8} unit="MWh" delta={+2.4} intent="success" />
-            <KpiCard title="Battery SoC" value={72} unit="%" delta={+1.2} intent="neutral" />
-            <KpiCard title="Load (Critical)" value={1.1} unit="MW" delta={-0.3} intent="success" />
-            <KpiCard title="Alerts (Open)" value={2} unit="" delta={+1.0} intent="warning" />
-          </div>
+     <div className="space-y-3">
+         <h2 className="text-lg font-medium">Energy Systems Status</h2>
+         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+           {energySystems.map((system) => (
+             <EnergySystemCard
+               key={system.type}
+               type={system.type}
+               title={system.title}
+               voltage={system.voltage}
+               current={system.current}
+               voltageUnit={system.voltageUnit}
+               currentUnit={system.currentUnit}
+             />
+           ))}
+         </div>
+         </div>
 
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <Card>
@@ -125,7 +161,7 @@ export default function OperatorHome() {
 
           <div className="grid gap-4 md:grid-cols-2">
             {/* Generation trend */}
-            <ChartCard title="Generation (Expected vs Actual)" data={expectedVsActual().actual} type="line" />
+            <ChartCard title="TODAY'S GRAPH" data={expectedVsActual().actual} type="line" />
             {/* Load distribution as pie */}
             <ChartCard
               title="Load Distribution"

@@ -88,6 +88,7 @@ const dictionaries: Dictionaries = {
     overview: "ओवरव्यू",
     fleet: "फ्लीट",
     analytics: "एनालिटिक्स",
+    Dashboard:" ",
     admin: "एडमिन",
     liveStatus: "लाइव स्थिति",
     kpis: "केपीआई",

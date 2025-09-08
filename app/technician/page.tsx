@@ -10,7 +10,37 @@ import { Textarea } from "@/components/ui/textarea"
 import { Input } from "@/components/ui/input"
 import { ChartCard } from "@/components/chart-card"
 
+
 export default function TechnicianHome() {
+    // Energy system data - in real app this would come from your API/state
+  const energySystems = [
+    {
+      type: "solar" as const,
+      title: "Solar Panel Array",
+      voltage: 48.2,
+      current: 12.5,
+    },
+    {
+      type: "wind" as const, 
+      title: "Wind Turbine",
+      voltage: 42.8,
+      current: 8.3,
+    },
+    {
+      type: "battery" as const,
+      title: "Battery Storage",
+      voltage: 51.4,
+      current: 15.2,
+    },
+    {
+      type: "grid" as const,
+      title: "Grid Connection", 
+      voltage: 230.0,
+      current: 22.1,
+      voltageUnit: "V AC",
+      currentUnit: "A AC",
+    },
+  ]
   return (
     <I18nProvider>
       <AppHeader />

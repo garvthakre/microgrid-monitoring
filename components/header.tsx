@@ -18,7 +18,7 @@ import { useI18n } from "@/lib/i18n"
 import { useRole } from "@/components/role-provider"
 import type { Role } from "@/lib/roles"
 import { useState } from "react"
-
+import Image from "next/image"
 export function AppHeader() {
   const pathname = usePathname()
   const { theme, setTheme } = useTheme()
@@ -47,16 +47,23 @@ export function AppHeader() {
   return (
     <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="text-xs text-muted-foreground border-b bg-muted/30">
-        <div className="mx-auto max-w-7xl px-2 sm:px-4 py-1">
-          <span className="hidden sm:inline">Government of Chhattisgarh · </span>
-          <span className="text-xs">Microgrid Monitoring System</span>
-        </div>
+        
       </div>
 
       <div className="mx-auto max-w-7xl px-2 sm:px-4 py-2 sm:py-3">
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2 min-w-0 flex-1">
-            <PanelsTopLeft className="size-5 sm:size-6 text-primary flex-shrink-0" aria-hidden />
+              <div className="flex items-center gap-2 flex-shrink-0">
+              <Image
+                src="/urjanetra.png" // Place your logo in public/logo.png
+                alt="URJANETRA Logo"
+                width={24}
+                height={24}
+                className="sm:w-6 sm:h-6 w-5 h-5"
+              />
+             
+              {/* <PanelsTopLeft className="size-5 sm:size-6 text-primary flex-shrink-0" aria-hidden /> */}
+            </div>
             <Link href="/" className="font-semibold text-sm sm:text-base lg:text-lg truncate min-w-0 flex-shrink-0">
               <span className="block sm:hidden">URJANETRA</span>
               <span className="hidden sm:block">{t("appTitle")}</span>
@@ -78,9 +85,7 @@ export function AppHeader() {
           </div>
 
           <div className="flex items-center gap-1 sm:gap-2">
-            <Badge variant="outline" className="hidden sm:inline-flex text-xs px-2 py-1">
-              {t("demoMode")}
-            </Badge>
+         
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -120,36 +125,7 @@ export function AppHeader() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="gap-1 sm:gap-2 h-8 sm:h-9 bg-transparent text-xs sm:text-sm px-2 sm:px-3"
-                  aria-label="role"
-                >
-                  <CircleUserRound className="size-3 sm:size-4 flex-shrink-0" />
-                  <span className="hidden sm:inline capitalize truncate max-w-20">{role}</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-40">
-                <DropdownMenuLabel className="text-xs">Role</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                {(
-                  [
-                    ["admin", "adminRole"],
-                    ["operator", "operatorRole"],
-                    ["technician", "technicianRole"],
-                    ["community", "communityRole"],
-                    ["govt", "govtRole"],
-                  ] as const
-                ).map(([val, key]) => (
-                  <DropdownMenuItem key={val} onClick={() => setRole(val as Role)} className="text-sm">
-                    {t(key)} {role === val ? "•" : ""}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+        
           </div>
         </div>
 

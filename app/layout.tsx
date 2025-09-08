@@ -16,13 +16,13 @@ export const metadata: Metadata = {
   generator: "v0.app",
 }
 
-export default function RootLayout({
+export default  async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
   const cookieStore = cookies()
-  const initialRole = (cookieStore.get(ROLE_COOKIE)?.value as Role) || "operator"
+  const initialRole = await (cookieStore.get(ROLE_COOKIE)?.value as Role) || "operator"
 
   return (
     <html lang="en">
