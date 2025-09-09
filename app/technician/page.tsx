@@ -34,7 +34,7 @@ export default function TechnicianHome() {
     },
     {
       type: "grid" as const,
-      title: "Grid Connection", 
+      title: "Electric Grid", 
       voltage: 230.0,
       current: 22.1,
       voltageUnit: "V AC",

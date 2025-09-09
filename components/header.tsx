@@ -19,6 +19,7 @@ import { useRole } from "@/components/role-provider"
 import type { Role } from "@/lib/roles"
 import { useState } from "react"
 import Image from "next/image"
+
 export function AppHeader() {
   const pathname = usePathname()
   const { theme, setTheme } = useTheme()
@@ -29,7 +30,7 @@ export function AppHeader() {
   const allNav = [
     { href: "/", label: t("overview"), roles: ["admin", "operator", "technician", "community", "govt"] as Role[] },
     { href: "/fleet", label: t("fleet"), roles: ["admin", "operator", "technician", "govt"] as Role[] },
-    { href: "/analytics", label: t("analytics"), roles: ["admin", "govt"] as Role[] },
+     
     { href: "/admin", label: t("admin"), roles: ["admin"] as Role[] },
   ]
   const roleDash =
@@ -50,31 +51,29 @@ export function AppHeader() {
         
       </div>
 
-      <div className="mx-auto max-w-7xl px-2 sm:px-4 py-2 sm:py-3">
-        <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2 min-w-0 flex-1">
-              <div className="flex items-center gap-2 flex-shrink-0">
+      <div className="mx-auto max-w-7xl px-3 sm:px-6 pt-2 sm:py-4">
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
+            <div className="flex items-center gap-1 sm:gap-4 flex-shrink-0  ">
               <Image
-                src="/urjanetra.png" // Place your logo in public/logo.png
+                src="/urjanetra.png"  
                 alt="URJANETRA Logo"
-                width={24}
-                height={24}
-                className="sm:w-6 sm:h-6 w-5 h-5"
+                width={36}
+                height={40}
+                className="w-15 h-12 sm:w-9 sm:h-9 md:w-10 md:h-10  "
               />
-             
-              {/* <PanelsTopLeft className="size-5 sm:size-6 text-primary flex-shrink-0" aria-hidden /> */}
+              <Link href="/" className="font-bold text-base sm:text-lg md:text-xl lg:text-2xl truncate min-w-0 flex-shrink-0">
+                <span className="block sm:hidden"><i>URJA </i>NETRA</span>
+                <span className="hidden sm:block">{t("appTitle")}</span>
+              </Link>
             </div>
-            <Link href="/" className="font-semibold text-sm sm:text-base lg:text-lg truncate min-w-0 flex-shrink-0">
-              <span className="block sm:hidden">URJANETRA</span>
-              <span className="hidden sm:block">{t("appTitle")}</span>
-            </Link>
 
-            <nav className="hidden lg:flex items-center gap-4 xl:gap-6 ml-4 xl:ml-6">
+            <nav className="hidden lg:flex items-center gap-6 xl:gap-8 ml-6 xl:ml-8">
               {nav.map((n) => (
                 <Link
                   key={n.href}
                   href={n.href}
-                  className={`text-sm font-medium transition-colors hover:text-primary whitespace-nowrap ${
+                  className={`text-sm xl:text-base font-medium transition-colors hover:text-primary whitespace-nowrap ${
                     pathname === n.href ? "text-primary" : "text-muted-foreground"
                   }`}
                 >
@@ -84,13 +83,11 @@ export function AppHeader() {
             </nav>
           </div>
 
-          <div className="flex items-center gap-1 sm:gap-2">
-         
-
+          <div className="flex items-center gap-2 sm:gap-3">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="h-8 w-8 sm:h-9 sm:w-9" aria-label="language">
-                  <Globe className="size-3 sm:size-4" />
+                <Button variant="ghost" size="sm" className="h-9 w-9 sm:h-10 sm:w-10" aria-label="language">
+                  <Globe className="size-4 sm:size-5" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-32">
@@ -106,8 +103,8 @@ export function AppHeader() {
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="h-8 w-8 sm:h-9 sm:w-9" aria-label="toggle theme">
-                  {theme === "light" ? <Sun className="size-3 sm:size-4" /> : <Moon className="size-3 sm:size-4" />}
+                <Button variant="ghost" size="sm" className="h-9 w-9 sm:h-10 sm:w-10" aria-label="toggle theme">
+                  {theme === "light" ? <Sun className="size-4 sm:size-5" /> : <Moon className="size-4 sm:size-5" />}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-32">
@@ -124,13 +121,11 @@ export function AppHeader() {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-
-        
           </div>
         </div>
 
-        <div className="lg:hidden border-t mt-2 pt-2">
-          <nav className="flex items-center gap-3 sm:gap-4 overflow-x-auto pb-1 scrollbar-hide">
+        <div className="lg:hidden border-t mt-3 pt-3">
+          <nav className="flex items-center gap-4 sm:gap-6 overflow-x-auto pb-1 scrollbar-hide">
             {nav.map((n) => (
               <Link
                 key={n.href}
