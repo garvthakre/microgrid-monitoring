@@ -18,7 +18,7 @@ function FleetInner() {
     <main className="mx-auto max-w-7xl px-4 py-6 space-y-6">
       <div className="space-y-2">
         <h1 className="text-2xl font-bold">{t("fleet")}</h1>
-        <p className="text-sm text-muted-foreground">Chhattisgarh microgrid fleet overview</p>
+        <p className="text-sm text-muted-foreground">Odisha microgrid fleet overview</p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

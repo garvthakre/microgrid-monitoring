@@ -7,17 +7,17 @@ export type Site = {
 
 // Chhattisgarh sites (approximate positions on placeholder map as percentages)
 export const SITES: Site[] = [
-  { id: "CG-001", name: "Raipur Solar Hub", health: "good", coords: { x: 58, y: 55 } },
-  { id: "CG-002", name: "Bilaspur Community Microgrid", health: "good", coords: { x: 60, y: 38 } },
-  { id: "CG-003", name: "Durg-Bhilai Industrial Site", health: "warning", coords: { x: 50, y: 56 } },
-  { id: "CG-004", name: "Korba Thermal Offset", health: "good", coords: { x: 68, y: 33 } },
-  { id: "CG-005", name: "Raigarh Rural Cluster", health: "warning", coords: { x: 74, y: 45 } },
-  { id: "CG-006", name: "Jagdalpur Tribal Hamlet", health: "good", coords: { x: 58, y: 78 } },
-  { id: "CG-007", name: "Ambikapur Forest Edge", health: "good", coords: { x: 55, y: 22 } },
-  { id: "CG-008", name: "Dhamtari Agri Feeder", health: "good", coords: { x: 58, y: 64 } },
-  { id: "CG-009", name: "Rajnandgaon Township", health: "critical", coords: { x: 46, y: 58 } },
-  { id: "CG-010", name: "Kanker Remote Site", health: "warning", coords: { x: 52, y: 70 } },
-]
+  { id: "OR-001", name: "Raghurajpur Crafts Village", health: "good", coords: { x: 75, y: 58 } },
+  { id: "OR-002", name: "Babeijoda Tribal Settlement", health: "warning", coords: { x: 80, y: 25 } },
+  { id: "OR-003", name: "Bhuban Metal Crafts Village", health: "critical", coords: { x: 62, y: 40 } },
+  { id: "OR-004", name: "Nuapatna Weaving Cluster", health: "good", coords: { x: 68, y: 50 } },
+  { id: "OR-005", name: "R. Udayagiri Power Project", health: "good", coords: { x: 85, y: 70 } },
+  { id: "OR-006", name: "Danguria Tribal Village", health: "warning", coords: { x: 55, y: 85 } },
+  { id: "OR-007", name: "Fategarh Agri Hub", health: "good", coords: { x: 70, y: 65 } },
+  { id: "OR-008", name: "Pipili Artisan Market", health: "good", coords: { x: 73, y: 60 } },
+  { id: "OR-009", name: "Khalana Rural Electrification", health: "critical", coords: { x: 66, y: 45 } },
+  { id: "OR-010", name: "Serango Farm Collective", health: "warning", coords: { x: 88, y: 72 } },
+];
 
 export function randomWalk(prev: number, step = 2, min = 0, max = 100) {
   const next = prev + (Math.random() * step * 2 - step)
