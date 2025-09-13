@@ -58,9 +58,9 @@ export function AppHeader() {
               <Image
                 src="/cropped_circle_image.png"  
                 alt="URJANETRA Logo"
-                width={36}
+                width={34}
                 height={40}
-                className="w-15 h-12 sm:w-9 sm:h-9 md:w-10 md:h-10  "
+                className="w-15 h-14 sm:w-9 sm:h-9 md:w-10 md:h-10  "
               />
               <Link href="/" className="font-bold text-base sm:text-lg md:text-xl lg:text-2xl truncate min-w-0 flex-shrink-0">
                 <span className="block sm:hidden"><i>URJA </i>NETRA</span>
