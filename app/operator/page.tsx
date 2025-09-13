@@ -14,7 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import * as React from "react"
 import { EnergySystemCard } from "@/components/energy-system-card"
 function OperatorSelector() {
-  const [site, setSite] = React.useState("Raipur")
+  const [site, setSite] = React.useState("Malegaon")
   return (
     <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
       <div className="text-sm text-muted-foreground">Assigned site</div>
