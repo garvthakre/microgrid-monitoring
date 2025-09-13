@@ -56,7 +56,7 @@ export function AppHeader() {
           <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
             <div className="flex items-center gap-1 sm:gap-4 flex-shrink-0  ">
               <Image
-                src="/urjanetra.png"  
+                src="/cropped_circle_image.png"  
                 alt="URJANETRA Logo"
                 width={36}
                 height={40}
