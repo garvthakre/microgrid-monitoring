@@ -23,7 +23,7 @@ function OperatorSelector() {
           <SelectValue placeholder="Select site" />
         </SelectTrigger>
         <SelectContent>
-          {["Raipur", "Bilaspur", "Korba", "Raigarh"].map((s) => (
+          {["Malegaon", "RaghurajPur", "Nuapatna", "Pipili"].map((s) => (
             <SelectItem key={s} value={s}>
               {s}
             </SelectItem>
